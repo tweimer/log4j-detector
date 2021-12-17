@@ -1,9 +1,11 @@
 package com.mergebase.log4j;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class CRC64 {
     private static final long P = 0x42F0E1EBA9EA3693L;
     private static final long[] T = new long[256];
-    private static final byte[] NULL_BYTES_REPLACEMENT = "\u0000".getBytes(Bytes.UTF_8);
+    private static final byte[] NULL_BYTES_REPLACEMENT = "\u0000".getBytes(UTF_8);
 
     static {
         for (int b = 0; b < T.length; ++b) {
@@ -31,7 +33,7 @@ public class CRC64 {
     }
 
     static long hash(String s) {
-        byte[] bytes = s != null ? s.getBytes(Bytes.UTF_8) : null;
+        byte[] bytes = s != null ? s.getBytes(UTF_8) : null;
         return hash(bytes);
     }
 

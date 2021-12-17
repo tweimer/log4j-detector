@@ -27,7 +27,7 @@ public class Strings {
      * returns a map:  {"column" --> 0, "foo" --> 1, "bar" --> 2}
      */
     public static Map<String, Integer> positions(String headerLine) {
-        HashMap<String, Integer> m = new HashMap<String, Integer>();
+        HashMap<String, Integer> m = new HashMap<>();
         int j = headerLine.indexOf('(');
         int k = headerLine.indexOf(')');
         if (j >= 0 && j < k) {
@@ -55,7 +55,7 @@ public class Strings {
     /**
      * Default Java case-sensitive goes A-Za-z, but I prefer AaBbCc.
      */
-    public final static Comparator<String> CASE_SENSITIVE_SANE = new Comparator<String>() {
+    public final static Comparator<String> CASE_SENSITIVE_SANE = new Comparator<>() {
         @Override
         public int compare(String s1, String s2) {
             if (s1 == s2) {
@@ -215,7 +215,7 @@ public class Strings {
     }
 
     public static List<String> intoLines(final String... strings) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         if (strings != null) {
             for (final String s : strings) {
                 if (s != null) {
