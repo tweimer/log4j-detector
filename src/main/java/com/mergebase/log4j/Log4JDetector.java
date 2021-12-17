@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +33,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import static com.mergebase.log4j.VersionComparator.compare;
 
@@ -81,26 +82,25 @@ public class Log4JDetector {
     // This occurs in "DataSourceConnectionSource.class" in 2.17.1 and friends.
     private static final byte[] IS_CVE_2021_44832_SAFE = Bytes.fromString("JNDI must be enabled by setting log4j2.enableJndiJdbc=true");
 
-    private static boolean verbose = false;
-    private static boolean debug = false;
-    private static boolean json = false;
-    private static Set<String> excludes = new TreeSet<String>();
-    private static boolean foundHits = false;
-    private static boolean foundLog4j1 = false;
+    private static boolean verbose;
+    private static boolean debug;
+    private static boolean json;
+    private static Set<String> excludes = new TreeSet<>();
+    private static boolean foundHits;
+    private static boolean foundLog4j1;
 
-    private static File currentDir = null;
-    private static String currentPath = null;
-    private static boolean printFullPaths = false;
+    private static File currentDir;
+    private static String currentPath;
+    private static boolean printFullPaths;
 
     public static void main(String[] args) throws IOException {
         currentDir = canonicalize(new File("."));
         currentPath = currentDir.getPath();
 
-        List<String> argsList = new ArrayList<String>();
-        Collections.addAll(argsList, args);
-
+        List<String> argsList = new ArrayList<>(Arrays.asList(args));
+        
         Iterator<String> it = argsList.iterator();
-        List<String> stdinLines = new ArrayList<String>();
+        List<String> stdinLines = new ArrayList<>();
         while (it.hasNext()) {
             final String argOrig = it.next().trim();
             if ("--debug".equals(argOrig)) {
@@ -130,7 +130,7 @@ public class Log4JDetector {
             } else if ("--stdin".equals(argOrig)) {
                 it.remove();
                 byte[] b = Bytes.streamToBytes(System.in);
-                String s = new String(b, Bytes.UTF_8);
+                String s = new String(b, UTF_8);
                 stdinLines = Strings.intoLines(s);
             } else {
                 File f;
@@ -209,7 +209,6 @@ public class Log4JDetector {
         four[1] = four[2];
         four[2] = four[3];
         four[3] = in.read();
-        File f = new File("blah");
         return four[3];
     }
 
@@ -217,7 +216,7 @@ public class Log4JDetector {
         return chunk[0] == 0x50 && chunk[1] == 0x4B && chunk[2] == 3 && chunk[3] == 4;
     }
 
-    private static final Comparator<File> FILES_ORDER_BY_NAME = new Comparator<File>() {
+    private static final Comparator<File> FILES_ORDER_BY_NAME = new Comparator<>() {
         @Override
         public int compare(File f1, File f2) {
             String s1 = f1 != null ? f1.getName() : "";
@@ -367,6 +366,7 @@ public class Log4JDetector {
 
                             private ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
+                            @Override
                             public ZipInputStream getFreshZipStream() {
                                 int pos = getZipStart(bin);
                                 if (pos < 0) {
@@ -384,6 +384,7 @@ public class Log4JDetector {
                                 return new ZipInputStream(bin);
                             }
 
+                            @Override
                             public void close() {
                             }
                         };
@@ -598,7 +599,7 @@ public class Log4JDetector {
                 status = msg.substring(x).trim();
                 msg = msg.substring(0, x).trim();
             }
-            Map<String, String> m = new LinkedHashMap<String, String>();
+            Map<String, String> m = new LinkedHashMap<>();
             m.put(status, zipPath);
             m.put("info", msg);
             return Java2Json.format(m) + ",";
@@ -620,6 +621,7 @@ public class Log4JDetector {
             private BufferedInputStream bin;
             private ZipInputStream zin;
 
+            @Override
             public ZipInputStream getFreshZipStream() {
                 Util.close(zin, bin, fin);
                 try {
@@ -655,6 +657,7 @@ public class Log4JDetector {
                 }
             }
 
+            @Override
             public void close() {
                 Util.close(zin, bin, fin);
             }
@@ -712,7 +715,7 @@ public class Log4JDetector {
         return pos;
     }
 
-    private static final HashSet<Long> visited = new HashSet<Long>();
+    private static final HashSet<Long> visited = new HashSet<>();
 
     private static File canonicalize(File f) {
         try {

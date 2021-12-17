@@ -66,7 +66,7 @@ public class VersionComparator {
 
         // In cases liked "1.2.alpha.3" change it to "1.2.alpha3".
         // (pure "pre-release" words are concatenated to next element).
-        List<String> list = new ArrayList<String>(v1.length);
+        List<String> list = new ArrayList<>(v1.length);
         for (int i = 0; i < v1.length; i++) {
             String current = v1[i];
             String prev = i > 0 ? v1[i - 1] : null;
@@ -87,7 +87,7 @@ public class VersionComparator {
 
         // In cases liked "1.2.alpha" change it to "1.2alpha".
         // (pure pre-release words are concatenated to previous element).
-        list = new ArrayList<String>(adjusted.length);
+        list = new ArrayList<>(adjusted.length);
         for (int i = 0; i < adjusted.length; i++) {
             String current = adjusted[i];
             String prev = i > 0 ? adjusted[i - 1] : null;
@@ -132,7 +132,7 @@ public class VersionComparator {
     }
 
     private static String[] subSplit(String s) {
-        List<String> split = new ArrayList<String>();
+        List<String> split = new ArrayList<>();
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -153,7 +153,7 @@ public class VersionComparator {
     }
 
     public static Comparator<String> comparatorBySimilarity(final String anchor) {
-        return new Comparator<String>() {
+        return new Comparator<>() {
             @Override
             public int compare(String o1, String o2) {
                 int i1 = similarity(anchor, o1);
@@ -217,7 +217,7 @@ public class VersionComparator {
     interface SerializableComparator<T> extends Comparator<T>, Serializable {
     }
 
-    public final static SerializableComparator<String> COMPARE_VERSION_STRINGS = new SerializableComparator<String>() {
+    public final static SerializableComparator<String> COMPARE_VERSION_STRINGS = new SerializableComparator<>() {
         public int compare(String v1, String v2) {
             if (v1 != null && v1.equals(v2)) {
                 return 0;
@@ -356,7 +356,7 @@ public class VersionComparator {
         }
     };
 
-    public final static SerializableComparator<File> COMPARE_FILES_BY_VERSION = new SerializableComparator<File>() {
+    public final static SerializableComparator<File> COMPARE_FILES_BY_VERSION = new SerializableComparator<>() {
         public int compare(File v1, File v2) {
             if (v1 == v2 || (v1 != null && v1.equals(v2))) {
                 return 0;
@@ -385,7 +385,7 @@ public class VersionComparator {
         return s;
     }
 
-    public final static SerializableComparator<String> COMPARE_VERSION_STRINGS_TIEBREAK_ON_LENGTH = new SerializableComparator<String>() {
+    public final static SerializableComparator<String> COMPARE_VERSION_STRINGS_TIEBREAK_ON_LENGTH = new SerializableComparator<>() {
         public int compare(String v1, String v2) {
             int c = COMPARE_VERSION_STRINGS.compare(v1, v2);
             if (c == 0) {
@@ -571,7 +571,7 @@ public class VersionComparator {
         }
         s = s.toLowerCase(Locale.ENGLISH);
 
-        List<String> splits = new ArrayList<String>();
+        List<String> splits = new ArrayList<>();
         String tok = "";
         String prevTok = "";
         int prevPos = -1;
