@@ -420,12 +420,12 @@ public class Java2Json {
             s = "-" + s;
         }
         if (periods == 1 || eTotal == 1) {
-            return new Double(s);
+            return Double.valueOf(s);
         } else {
             try {
-                return new Long(s);
+                return Long.valueOf(s);
             } catch (NumberFormatException nfe) {
-                return new Double(s);
+                return Double.valueOf(s);
             }
         }
     }
