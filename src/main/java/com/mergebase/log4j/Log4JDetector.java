@@ -13,6 +13,9 @@
  */
 package com.mergebase.log4j;
 
+import static com.mergebase.log4j.VersionComparator.compare;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -33,10 +36,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import static com.mergebase.log4j.VersionComparator.compare;
 
 public class Log4JDetector {
 
@@ -64,23 +63,23 @@ public class Log4JDetector {
     private static final String ACTUAL_FILE_LOG4J_JNDI_MANAGER = "core/net/JndiManager.class";
     private static final String ACTUAL_FILE_LOG4J_JDBC_DSCS = "core/appender/db/jdbc/DataSourceConnectionSource.class";
 
-    // This occurs in "JndiManager.class" in 2.15.0
-    private static final byte[] IS_LOG4J_SAFE_2_15_0 = Bytes.fromString("Invalid JNDI URI - {}");
+    /** This occurs in "JndiManager.class" in 2.15.0 */
+    private static final byte[] IS_LOG4J_SAFE_2_15_0 = "Invalid JNDI URI - {}".getBytes(UTF_8);
 
-    // This occurs in "JndiManager.class" in 2.16.0
-    private static final byte[] IS_LOG4J_SAFE_2_16_0 = Bytes.fromString("log4j2.enableJndi");
+    /** This occurs in "JndiManager.class" in 2.16.0 */
+    private static final byte[] IS_LOG4J_SAFE_2_16_0 = "log4j2.enableJndi".getBytes(UTF_8);
 
-    // This occurs in "JndiLookup.class" in 2.17.0
-    private static final byte[] INSIDE_LOG4J_2_17_0 = Bytes.fromString("JNDI must be enabled by setting log4j2.enableJndiLookup=true");
+    /** This occurs in "JndiLookup.class" in 2.17.0 */
+    private static final byte[] INSIDE_LOG4J_2_17_0 = "JNDI must be enabled by setting log4j2.enableJndiLookup=true".getBytes(UTF_8);
 
-    // This occurs in "JndiLookup.class" before 2.12.2
-    private static final byte[] IS_LOG4J_NOT_SAFE_2_12_2 = Bytes.fromString("Error looking up JNDI resource [{}].");
+    /** This occurs in "JndiLookup.class" before 2.12.2 */
+    private static final byte[] IS_LOG4J_NOT_SAFE_2_12_2 = "Error looking up JNDI resource [{}].".getBytes(UTF_8);
 
-    // This occurs in "JndiManager.class" in 2.3.1
-    private static final byte[] IS_LOG4J_SAFE_2_3_1 = Bytes.fromString("Unsupported JNDI URI - {}");
+    /** This occurs in "JndiManager.class" in 2.3.1 */
+    private static final byte[] IS_LOG4J_SAFE_2_3_1 = "Unsupported JNDI URI - {}".getBytes(UTF_8);
 
-    // This occurs in "DataSourceConnectionSource.class" in 2.17.1 and friends.
-    private static final byte[] IS_CVE_2021_44832_SAFE = Bytes.fromString("JNDI must be enabled by setting log4j2.enableJndiJdbc=true");
+    /** This occurs in "DataSourceConnectionSource.class" in 2.17.1 and friends. */
+    private static final byte[] IS_CVE_2021_44832_SAFE = "JNDI must be enabled by setting log4j2.enableJndiJdbc=true".getBytes(UTF_8);
 
     private static boolean verbose;
     private static boolean debug;
