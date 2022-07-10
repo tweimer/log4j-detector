@@ -129,7 +129,7 @@ public class Log4JDetector {
                 }
             } else if ("--stdin".equals(argOrig)) {
                 it.remove();
-                byte[] b = Bytes.streamToBytes(System.in);
+                byte[] b = System.in.readAllBytes();
                 String s = new String(b, UTF_8);
                 stdinLines = Strings.intoLines(s);
             } else {
@@ -349,7 +349,7 @@ public class Log4JDetector {
                 byte[] b = new byte[0];
                 if (isSubZip || needClassBytes) {
                     try {
-                        b = Bytes.streamToBytes(zin, false, zipEntrySize + 1);
+                        b = zin.readAllBytes();
                     } catch (Exception e) {
                         System.err.println("-- Problem - could not extract " + fullPath + " (size=" + zipEntrySize + ") - " + e);
                         if (verbose) {
