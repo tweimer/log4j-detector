@@ -1,11 +1,13 @@
 package com.mergebase.log4j;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
 
 public class Bytes {
 
@@ -13,22 +15,10 @@ public class Bytes {
     public static final int LAST_READ_KEY = 1;
 
     public static byte[] fileToBytes(File f) {
-        FileInputStream fin;
         try {
-            fin = new FileInputStream(f);
-            if (f.length() <= 32768) {
-                try {
-                    byte[] buf = new byte[(int) f.length()];
-                    fill(buf, 0, fin);
-                    return buf;
-                } finally {
-                    fin.close();
-                }
-            } else {
-                return streamToBytes(fin);
-            }
+            return Files.readAllBytes(f.toPath());
         } catch (IOException ioe) {
-            throw new RuntimeException("Failed to read file [" + f.getName() + "] " + ioe, ioe);
+            throw new UncheckedIOException("Failed to read file [" + f.getName() + "] " + ioe, ioe);
         }
     }
 
