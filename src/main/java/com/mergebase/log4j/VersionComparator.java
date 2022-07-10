@@ -158,7 +158,7 @@ public class VersionComparator {
             public int compare(String o1, String o2) {
                 int i1 = similarity(anchor, o1);
                 int i2 = similarity(anchor, o2);
-                return Integer.valueOf(i1).compareTo(i2);
+                return Integer.compare(i1, i2);
             }
         };
     }
@@ -287,7 +287,7 @@ public class VersionComparator {
                             }
 
                             if (sub1.length != sub2.length) {
-                                c = Integer.valueOf(sub1.length).compareTo(sub2.length);
+                                c = Integer.compare(sub1.length, sub2.length);
 
                                 if (Math.abs(sub1.length - sub2.length) == 1) {
                                     String extraBit = sub1.length > sub2.length ? sub1[sub1.length - 1] : sub2[sub2.length - 1];
@@ -315,10 +315,10 @@ public class VersionComparator {
                         if (ver1.length + 1 == ver2.length || ver1.length == ver2.length + 1) {
                             String extraBit = ver1.length > ver2.length ? ver1[ver1.length - 2] : ver2[ver2.length - 2];
                             if (1 != calculateScore(extraBit, true)) {
-                                c = Integer.valueOf(ver1.length).compareTo(ver2.length);
+                                c = Integer.compare(ver1.length, ver2.length);
                             }
                         } else {
-                            c = Integer.valueOf(ver1.length).compareTo(ver2.length);
+                            c = Integer.compare(ver1.length, ver2.length);
                         }
                         done = true;
                     }
@@ -341,7 +341,7 @@ public class VersionComparator {
                         if (c == 0) {
                             String stripped1 = stripPrefixVs(v1);
                             String stripped2 = stripPrefixVs(v2);
-                            c = Integer.valueOf(stripped1.length()).compareTo(stripped2.length());
+                            c = Integer.compare(stripped1.length(), stripped2.length());
                         }
                     }
 
@@ -390,7 +390,7 @@ public class VersionComparator {
             int c = COMPARE_VERSION_STRINGS.compare(v1, v2);
             if (c == 0) {
                 // penultimate last-resort comparison: length
-                c = Integer.valueOf(v1.length()).compareTo(v2.length());
+                c = Integer.compare(v1.length(), v2.length());
                 if (c == 0) {
                     // last-resort comparison:  lexicographic (toString)
                     c = v1.compareTo(v2);
@@ -442,7 +442,7 @@ public class VersionComparator {
         boolean isNegative2 = min2 < 0;
         if (isNegative1 || isNegative2) {
             if (isNegative1 == isNegative2) {
-                c = Integer.valueOf(min1).compareTo(min2);
+                c = Integer.compare(min1, min2);
                 if (c != 0) {
                     return c;
                 }
