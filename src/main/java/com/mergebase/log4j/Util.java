@@ -4,9 +4,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.jar.JarFile;
 import java.util.zip.ZipFile;
@@ -35,13 +32,7 @@ public class Util {
                 continue;
             }
             try {
-                if (o instanceof ResultSet) {
-                    ((ResultSet) o).close();
-                } else if (o instanceof Statement) {
-                    ((Statement) o).close();
-                } else if (o instanceof Connection) {
-                    ((Connection) o).close();
-                } else if (o instanceof Reader) {
+                if (o instanceof Reader) {
                     ((Reader) o).close();
                 } else if (o instanceof Writer) {
                     ((Writer) o).close();
