@@ -40,16 +40,15 @@ public class Java2Json {
         this.json = json;
     }
 
-    private final static Long ZERO = Long.valueOf("0");
-    private final static int MAP = 0;
-    private final static int LIST = 1;
-    private final static int STRING = 2;
-    private final static int NUMBER = 3;
-    private final static int BOOLEAN = 5;
-    private final static int NULL = 6;
-    private final static int MODE_WHITESPACE = -1;
-    private final static int MODE_NORMAL = 0;
-    private final static int MODE_BACKSLASH = 1;
+    private static final int MAP = 0;
+    private static final int LIST = 1;
+    private static final int STRING = 2;
+    private static final int NUMBER = 3;
+    private static final int BOOLEAN = 5;
+    private static final int NULL = 6;
+    private static final int MODE_WHITESPACE = -1;
+    private static final int MODE_NORMAL = 0;
+    private static final int MODE_BACKSLASH = 1;
 
     public static String makePretty(String ugly) {
         Object juliusJson = parse(ugly);
@@ -61,20 +60,20 @@ public class Java2Json {
             return null;
         }
         json = json.trim();
-        if ("".equals(json)) {
-            return new LinkedHashMap<String, Object>();
+        if (json.isEmpty()) {
+            return new LinkedHashMap<>();
         } else {
             return (Map) parse(json);
         }
     }
 
-    public static List parseToList(String json) {
+    public static List<Object> parseToList(String json) {
         if (json == null) {
             return null;
         }
         json = json.trim();
-        if ("".equals(json)) {
-            return new ArrayList();
+        if (json.isEmpty()) {
+            return new ArrayList<>();
         } else {
             return (List) parse(json);
         }
@@ -94,21 +93,10 @@ public class Java2Json {
         char[] c = json.toCharArray();
         Java2Json p = new Java2Json(0, c);
 
-        try {
-            int type = nextObject(p);
-            Object o = parseObject(type, p);
-            finalWhitespace(p);
-            return o;
-
-        } catch (RuntimeException re) {
-            int charsLeft = c.length - p.pos;
-            if (p.pos > 10) {
-                // System.out.println("NEAR: [" + new String(c, p.pos - 10, Math.min(10 + charsLeft, 20)));
-            } else {
-                // System.out.println("NEAR: [" + new String(c, 0, Math.min(10 + charsLeft, Math.min(20, c.length))));
-            }
-            throw re;
-        }
+        int type = nextObject(p);
+        Object o = parseObject(type, p);
+        finalWhitespace(p);
+        return o;
     }
 
     public static String format(Object o) {
@@ -152,23 +140,18 @@ public class Java2Json {
     private static Object parseObject(int type, Java2Json p) {
         switch (type) {
             case MAP:
-                Map m = new LinkedHashMap();
+                Map<String,Object> m = new LinkedHashMap<>();
                 while (hasNextItem(p, '}')) {
                     String key = nextString(p);
                     nextChar(p, ':');
                     type = nextObject(p);
                     Object obj = parseObject(type, p);
-                    /*
-                    if (m.containsKey(key)) {
-                        throw new RuntimeException("JSON Map Already Contains Key [" + key + "]");
-                    }
-                     */
                     m.put(key, obj);
                 }
                 return m;
 
             case LIST:
-                ArrayList l = new ArrayList();
+                List<Object> l = new ArrayList<>();
                 while (hasNextItem(p, ']')) {
                     type = nextObject(p);
                     Object obj = parseObject(type, p);
@@ -370,7 +353,7 @@ public class Java2Json {
         }
 
         if ("0".equals(s)) {
-            return ZERO;
+            return 0L;
         }
 
         if (s.startsWith(".")) {
