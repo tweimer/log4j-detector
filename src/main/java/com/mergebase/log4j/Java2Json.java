@@ -32,14 +32,6 @@ public class Java2Json {
 
     public static final boolean tolerant = false;
 
-    private int pos;
-    private char[] json;
-
-    private Java2Json(int pos, char[] json) {
-        this.pos = pos;
-        this.json = json;
-    }
-
     private static final int MAP = 0;
     private static final int LIST = 1;
     private static final int STRING = 2;
@@ -49,6 +41,14 @@ public class Java2Json {
     private static final int MODE_WHITESPACE = -1;
     private static final int MODE_NORMAL = 0;
     private static final int MODE_BACKSLASH = 1;
+
+    private int pos;
+    private char[] json;
+
+    private Java2Json(int pos, char[] json) {
+        this.pos = pos;
+        this.json = json;
+    }
 
     public static String makePretty(String ugly) {
         Object juliusJson = parse(ugly);
@@ -63,7 +63,7 @@ public class Java2Json {
         if (json.isEmpty()) {
             return new LinkedHashMap<>();
         } else {
-            return (Map) parse(json);
+            return (Map<String, Object>) parse(json);
         }
     }
 
@@ -75,7 +75,7 @@ public class Java2Json {
         if (json.isEmpty()) {
             return new ArrayList<>();
         } else {
-            return (List) parse(json);
+            return (List<Object>) parse(json);
         }
     }
 
