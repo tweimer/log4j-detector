@@ -92,6 +92,8 @@ public class Log4JDetector {
     private static String currentPath;
     private static boolean printFullPaths;
 
+    private static final Set<Long> visited = new HashSet<>();
+
     public static void main(String[] args) throws IOException {
         currentDir = canonicalize(new File("."));
         currentPath = currentDir.getPath();
@@ -713,8 +715,6 @@ public class Log4JDetector {
         }
         return pos;
     }
-
-    private static final HashSet<Long> visited = new HashSet<>();
 
     private static File canonicalize(File f) {
         try {
