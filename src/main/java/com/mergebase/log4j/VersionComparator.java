@@ -28,7 +28,7 @@ import java.util.Locale;
  */
 public class VersionComparator {
 
-    static boolean DEBUG = false;
+    static boolean DEBUG;
 
     /**
      * Splits version number by dot.
@@ -82,8 +82,7 @@ public class VersionComparator {
             }
         }
 
-        String[] adjusted = new String[list.size()];
-        adjusted = list.toArray(adjusted);
+        String[] adjusted = list.toArray(String[]::new);
 
         // In cases liked "1.2.alpha" change it to "1.2alpha".
         // (pure pre-release words are concatenated to previous element).
@@ -104,9 +103,7 @@ public class VersionComparator {
         }
         list.add("");
 
-        adjusted = new String[list.size()];
-        adjusted = list.toArray(adjusted);
-        return adjusted;
+        return list.toArray(String[]::new);
     }
 
     public static String trimReleaseDecorator(String s) {
@@ -148,8 +145,8 @@ public class VersionComparator {
         if (buf.length() > 0) {
             split.add(buf.toString());
         }
-        String[] result = new String[split.size()];
-        return split.toArray(result);
+        
+        return split.toArray(String[]::new);
     }
 
     public static Comparator<String> comparatorBySimilarity(final String anchor) {
@@ -402,7 +399,7 @@ public class VersionComparator {
     };
 
     public static boolean isReleaseVersion(String s) {
-        if (s == null || "".equals(s.trim())) {
+        if (s == null || s.isBlank()) {
             return false;
         }
         String[] split = split(s);
@@ -467,7 +464,7 @@ public class VersionComparator {
                 // Since splitIntoAlphasAndNums() was called, that means that if 1st char is a digit, then
                 // all characters are digits:
                 if (startsWithDigit(sp1) || startsWithDigit(sp2)) {
-                    Comparable<Long> v1 = toLong(sp1);
+                    Long v1 = toLong(sp1);
                     Long v2 = toLong(sp2);
                     if (v1 != null && v2 != null) {
                         c = v1.compareTo(v2);
