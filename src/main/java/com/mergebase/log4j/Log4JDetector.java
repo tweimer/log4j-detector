@@ -217,20 +217,17 @@ public class Log4JDetector {
         return chunk[0] == 0x50 && chunk[1] == 0x4B && chunk[2] == 3 && chunk[3] == 4;
     }
 
-    private static final Comparator<File> FILES_ORDER_BY_NAME = new Comparator<>() {
-        @Override
-        public int compare(File f1, File f2) {
-            String s1 = f1 != null ? f1.getName() : "";
-            String s2 = f2 != null ? f2.getName() : "";
-            int c = s1.compareToIgnoreCase(s2);
-            if (c == 0) {
-                c = s1.compareTo(s2);
-                if (c == 0 && f1 != null) {
-                    c = f1.compareTo(f2);
-                }
+    private static final Comparator<File> FILES_ORDER_BY_NAME = (f1, f2) -> {
+        String s1 = f1 != null ? f1.getName() : "";
+        String s2 = f2 != null ? f2.getName() : "";
+        int c = s1.compareToIgnoreCase(s2);
+        if (c == 0) {
+            c = s1.compareTo(s2);
+            if (c == 0 && f1 != null) {
+                c = f1.compareTo(f2);
             }
-            return c;
         }
+        return c;
     };
 
     /**

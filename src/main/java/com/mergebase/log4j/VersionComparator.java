@@ -150,14 +150,7 @@ public class VersionComparator {
     }
 
     public static Comparator<String> comparatorBySimilarity(final String anchor) {
-        return new Comparator<>() {
-            @Override
-            public int compare(String o1, String o2) {
-                int i1 = similarity(anchor, o1);
-                int i2 = similarity(anchor, o2);
-                return Integer.compare(i1, i2);
-            }
-        };
+        return Comparator.comparingInt(s -> similarity(anchor, s));
     }
 
     public static int similarity(String s1, String s2) {
