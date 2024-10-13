@@ -208,6 +208,8 @@ public class VersionComparator {
     }
 
     public final static SerializableComparator<String> COMPARE_VERSION_STRINGS = new SerializableComparator<>() {
+        private static final long serialVersionUID = 3177611807080111703L;
+
         public int compare(String v1, String v2) {
             if (v1 != null && v1.equals(v2)) {
                 return 0;
@@ -347,6 +349,8 @@ public class VersionComparator {
     };
 
     public final static SerializableComparator<File> COMPARE_FILES_BY_VERSION = new SerializableComparator<>() {
+        private static final long serialVersionUID = 5016907109864510405L;
+
         public int compare(File v1, File v2) {
             if (v1 == v2 || (v1 != null && v1.equals(v2))) {
                 return 0;
@@ -376,6 +380,8 @@ public class VersionComparator {
     }
 
     public final static SerializableComparator<String> COMPARE_VERSION_STRINGS_TIEBREAK_ON_LENGTH = new SerializableComparator<>() {
+        private static final long serialVersionUID = -2140359334963829620L;
+
         public int compare(String v1, String v2) {
             int c = COMPARE_VERSION_STRINGS.compare(v1, v2);
             if (c == 0) {
