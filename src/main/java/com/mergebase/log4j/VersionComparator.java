@@ -615,7 +615,7 @@ public class VersionComparator {
             }
         }
         splits.add("");  // very important: append empty-string to all returned splits.
-        return splits.toArray(new String[splits.size()]);
+        return splits.toArray(String[]::new);
     }
 
     private static boolean isUnsplittable(String tok) {
