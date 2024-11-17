@@ -15,8 +15,14 @@ public class Bytes {
     public static final int LAST_READ_KEY = 1;
 
     public static byte[] fileToBytes(File f) {
-        try {
-            return Files.readAllBytes(f.toPath());
+        try (FileInputStream fin = new FileInputStream(f)) {  
+            if (f.length() <= 32768) {
+                byte[] buf = new byte[(int) f.length()];
+                fill(buf, 0, fin);
+                return buf;
+            } else {
+                return streamToBytes(fin, false);
+            }
         } catch (IOException ioe) {
             throw new UncheckedIOException("Failed to read file [" + f.getName() + "] " + ioe, ioe);
         }
